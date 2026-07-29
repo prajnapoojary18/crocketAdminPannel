@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Strings Business Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <h1>🧶 Heart Strings Business Manager</h1>
+            <p>Manage your crochet orders, expenses and profits</p>
+        </div>
+    </header>
+
+    <!-- Dashboard -->
+    <section class="dashboard">
+
+        <div class="dashboard-card">
+            <h3>Total Orders</h3>
+            <h2 id="totalOrders">0</h2>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Total Revenue</h3>
+            <h2 id="totalRevenue">₹0</h2>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Total Material Cost</h3>
+            <h2 id="totalExpense">₹0</h2>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Total Profit</h3>
+            <h2 id="totalProfit">₹0</h2>
+        </div>
+
+    </section>
+
+    <!-- Add New Order -->
+    <section class="order-form">
+
+        <h2>➕ Add New Order</h2>
+
+        <!-- Customer Details -->
+        <div class="form-section">
+
+            <h3>👤 Customer Details</h3>
+
+            <div class="form-grid">
+
+                <div class="input-group">
+                    <label>Customer Name</label>
+                    <input type="text" id="customerName" placeholder="Enter customer name">
+                </div>
+
+                <div class="input-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" id="customerPhone" placeholder="Enter mobile number">
+                </div>
+
+                <div class="input-group full-width">
+                    <label>Address</label>
+                    <textarea id="customerAddress" rows="3" placeholder="Enter complete address"></textarea>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Order Details -->
+        <div class="form-section">
+            <h3>🧶 Order Details</h3>
+
+            <div class="form-grid">
+
+                <div class="input-group">
+                    <label>Order ID</label>
+                    <input type="text" id="orderId" readonly>
+                </div>
+
+                <div class="input-group">
+                    <label>Product Name</label>
+                    <input type="text" id="productName" placeholder="Crochet Baby Dress">
+                </div>
+
+                <div class="input-group">
+                    <label>Category</label>
+                    <select id="category">
+                        <option value="">Select Category</option>
+                        <option>Baby Dress</option>
+                        <option>Women's Wear</option>
+                        <option>Men's Wear</option>
+                        <option>Bouquet</option>
+                        <option>Art</option>
+<!--                        <option>Blanket</option>-->
+                        <option>Accessories</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Colour</label>
+                    <input type="text" id="colour">
+                </div>
+
+                <div class="input-group">
+                    <label>Size</label>
+                    <input type="text" id="size">
+                </div>
+
+                <div class="input-group">
+                    <label>Quantity</label>
+                    <input type="number" id="quantity" value="1">
+                </div>
+
+                <div class="input-group">
+                    <label>Status</label>
+                    <select id="status">
+                        <option>Pending</option>
+                        <option>In Progress</option>
+                        <option>Ready</option>
+                        <option>Delivered</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Order Date</label>
+                    <input type="date" id="orderDate">
+                </div>
+
+                <div class="input-group">
+                    <label>Delivery Date</label>
+                    <input type="date" id="deliveryDate">
+                </div>
+
+                <div class="input-group full-width">
+                    <label>Product Image</label>
+                    <input type="file" id="productImage" accept="image/*">
+                </div>
+
+                <div class="input-group full-width">
+                    <img id="imagePreview" src="" style="display:none;width:180px;height:180px;object-fit:cover;border-radius:10px;border:2px solid #ddd;">
+                </div>
+
+            </div>
+        </div>
+        <!-- Payment Details -->
+        <div class="form-section">
+            <h3>💰 Payment Details</h3>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Total Selling Price (₹)</label>
+                    <input type="number" id="sellingPrice" placeholder="1500" oninput="calculateProfit()">
+                </div>
+
+                <div class="input-group">
+                    <label>Advance Received (₹)</label>
+                    <input type="number" id="advanceReceived" placeholder="500" oninput="calculateBalance()">
+                </div>
+
+                <div class="input-group">
+                    <label>Balance Amount (₹)</label>
+                    <input type="number" id="balanceAmount" placeholder="1000" readonly>
+                </div>
+
+                <div class="input-group">
+                    <label>Payment Status</label>
+                    <select id="paymentStatus">
+                        <option>Advance Paid</option>
+                        <option>Fully Paid</option>
+                        <option>Pending</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Material Cost -->
+        <div class="form-section">
+            <h3>🧵 Material Cost</h3>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Yarn Cost (₹)</label>
+                    <input type="number" id="yarnCost" placeholder="300" oninput="calculateProfit()">
+                </div>
+
+                <div class="input-group">
+                    <label>Buttons Cost (₹)</label>
+                    <input type="number" id="buttonCost" placeholder="40" oninput="calculateProfit()">
+                </div>
+
+                <div class="input-group">
+                    <label>Ribbon Cost (₹)</label>
+                    <input type="number" id="ribbonCost" placeholder="30" oninput="calculateProfit()">
+                </div>
+
+                <div class="input-group">
+                    <label>Accessories Cost (₹)</label>
+                    <input type="number" id="accessoriesCost" placeholder="50" oninput="calculateProfit()">
+                </div>
+
+                <div class="input-group">
+                    <label>Packing Cost (₹)</label>
+                    <input type="number" id="packingCost" placeholder="35" oninput="calculateProfit()">
+                </div>
+
+                <div class="input-group">
+                    <label>Courier Cost (₹)</label>
+                    <input type="number" id="courierCost" placeholder="80" oninput="calculateProfit()">
+                </div>
+
+                <div class="input-group">
+                    <label>Other Cost (₹)</label>
+                    <input type="number" id="otherCost" placeholder="20" oninput="calculateProfit()">
+                </div>
+
+                <div class="input-group">
+                    <label>Total Material Cost (₹)</label>
+                    <input type="number" id="totalMaterialCost" readonly>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profit -->
+        <div class="form-section">
+            <h3>💚 Profit (Auto Calculated)</h3>
+            <div class="profit-box">
+                <div class="profit-item">
+                    <span>Selling Price</span>
+                    <strong id="displaySellingPrice">₹0</strong>
+                </div>
+
+                <div class="profit-item">
+                    <span>Total Material Cost</span>
+                    <strong id="displayMaterialCost">₹0</strong>
+                </div>
+
+                <div class="profit-item profit-final">
+                    <span>Estimated Profit</span>
+                    <strong id="displayProfit">₹0</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-section">
+            <h3>📝 Notes</h3>
+            <div class="input-group">
+                <label>Customization / Special Instructions</label>
+                <textarea id="orderNotes" rows="5" placeholder="Enter colour preference, measurements, gift wrapping, special requests, delivery instructions, etc."></textarea>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="form-actions">
+            <button class="primary-btn" onclick="saveOrder()">💾 Save Order</button>
+            <button class="secondary-btn" onclick="clearForm()">Clear Form</button>
+        </div>
+
+    </section>
+    <!-- Search Orders -->
+    <section class="search-section">
+
+        <h2>🔍 Search Orders</h2>
+
+        <div class="search-box">
+            <input
+                    type="text"
+                    id="searchOrder"
+                    placeholder="Search by customer name, product or mobile number..."
+                    onkeyup="searchOrders()">
+        </div>
+
+    </section>
+
+    <!-- Orders Table -->
+    <section class="orders-section">
+
+        <h2>📋 Orders Table</h2>
+
+        <div class="table-container">
+
+            <table id="ordersTable">
+
+                <thead>
+
+                <tr>
+                    <th>Customer</th>
+                    <th>Mobile</th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Selling Price</th>
+                    <th>Material Cost</th>
+                    <th>Profit</th>
+                    <th>Actions</th>
+                </tr>
+
+                </thead>
+
+                <tbody id="ordersBody">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!-- Revenue & Profit Summary -->
+    <section class="summary-section">
+
+        <h2>📈 Revenue & Profit Summary</h2>
+
+        <div class="summary-grid">
+
+            <div class="summary-card">
+                <h3>Total Revenue</h3>
+                <h2 id="summaryRevenue">₹0</h2>
+            </div>
+
+            <div class="summary-card">
+                <h3>Total Material Cost</h3>
+                <h2 id="summaryExpense">₹0</h2>
+            </div>
+
+            <div class="summary-card">
+                <h3>Net Profit</h3>
+                <h2 id="summaryProfit">₹0</h2>
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
