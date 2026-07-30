@@ -62,6 +62,18 @@ function generateOrderId(){
 // Save Order
 // ==========================
 function saveOrder() {
+const requiredFields = [
+        "customerName",
+        "customerPhone",
+        "productName",
+        "sellingPrice"
+    ];
+    const isEmpty = requiredFields.every(id =>
+        document.getElementById(id).value.trim() === "");
+    if (isEmpty) {
+        alert("⚠️ No details added. Please enter the order details before saving.");
+        return;
+    }
 const orderId=document.getElementById("orderId").value||generateOrderId();
     const order = {
         orderId:orderId,
@@ -90,18 +102,24 @@ const orderId=document.getElementById("orderId").value||generateOrderId();
         profit: Number(document.getElementById("displayProfit").innerText.replace("₹", "")),
         notes: document.getElementById("orderNotes").value
     };
-    if(editIndex==-1){
+    let message = "";
+
+    if (editIndex == -1) {
         orders.push(order);
-    }else{
-        order.id=orders[editIndex].id;
-        orders[editIndex]=order;
-        editIndex=-1;
+        message = "Order Saved Successfully ❤️";
+    } else {
+        order.id = orders[editIndex].id;
+        orders[editIndex] = order;
+        editIndex = -1;
+        message = "Order Details Updated Successfully ✨";
     }
+
     saveLocalStorage();
     displayOrders();
     updateDashboard();
     clearForm();
-    alert("Order Saved Successfully ❤️");
+
+    alert(message);
 }
 
 // ==========================
@@ -255,15 +273,38 @@ function updateOrder(){
     updateDashboard();
     alert("Order updated successfully ❤️");
 }
-function searchOrders(){
-    const search=document.getElementById("searchOrder").value.toLowerCase();
-    const rows=document.querySelectorAll("#ordersBody tr");
-    rows.forEach(row=>{
-        const text=row.textContent.toLowerCase();
-        row.style.display=text.includes(search)?"":"none";
-    });
-}
 
+function searchOrders() {
+     const search = document.getElementById("searchOrder").value.toLowerCase().trim();
+     const rows = document.querySelectorAll("#ordersBody tr");
+     let found = false;
+     rows.forEach(row => {
+         // Skip the "No orders found" row
+         if (row.id === "noDataRow") return;
+         const text = row.textContent.toLowerCase();
+         if (text.includes(search)) {
+             row.style.display = "";
+             found = true;
+         } else {
+             row.style.display = "none";
+         }
+     });
+     const noDataRow = document.getElementById("noDataRow");
+     if (noDataRow) {
+         if (!found && search !== "") {
+             noDataRow.style.display = "";
+         } else {
+             noDataRow.style.display = "none";
+         }
+     }
+     // Scroll to the orders table if a match is found
+     if (found) {
+         document.getElementById("ordersSection").scrollIntoView({
+             behavior: "smooth",
+             block: "start"
+         });
+     }
+ }
 function calculateBalance() {
     const selling = Number(document.getElementById("sellingPrice").value) || 0;
     const advance = Number(document.getElementById("advanceReceived").value) || 0;

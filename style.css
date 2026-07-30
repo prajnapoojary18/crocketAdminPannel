@@ -762,3 +762,28 @@ tbody button:last-child:hover{
         opacity:1;
     }
 }
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-box input {
+    flex: 1;
+}
+
+.search-box button {
+    background-color: #13294B;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.search-box button:hover {
+    background-color: #0f203b;
+}

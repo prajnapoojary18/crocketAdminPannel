@@ -46,16 +46,16 @@
 
     <!-- Search Orders -->
     <section class="search-section">
-
         <h2>🔍 Search Orders</h2>
-
         <div class="search-box">
             <input
                     type="text"
                     id="searchOrder"
                     placeholder="Search by customer name, product or mobile number..."
-                    onkeyup="searchOrders()"
                     onkeydown="handleSearch(event)">
+            <button type="button" onclick="searchOrders()">
+                🔍 Search
+            </button>
         </div>
 
     </section>
@@ -297,7 +297,11 @@
                 </thead>
 
                 <tbody id="ordersBody">
-
+                <tr id="noDataRow" style="display:none;">
+                    <td colspan="9" style="text-align:center; color:red; font-weight:bold;">
+                        No orders found.
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
