@@ -44,35 +44,42 @@
 
     </section>
 
+    <!-- Search Orders -->
+    <section class="search-section">
+
+        <h2>🔍 Search Orders</h2>
+
+        <div class="search-box">
+            <input
+                    type="text"
+                    id="searchOrder"
+                    placeholder="Search by customer name, product or mobile number..."
+                    onkeyup="searchOrders()"
+                    onkeydown="handleSearch(event)">
+        </div>
+
+    </section>
+
     <!-- Add New Order -->
-    <section class="order-form">
-
+    <section class="order-form" id="addOrderSection">
         <h2>➕ Add New Order</h2>
-
         <!-- Customer Details -->
         <div class="form-section">
-
             <h3>👤 Customer Details</h3>
-
             <div class="form-grid">
-
                 <div class="input-group">
                     <label>Customer Name</label>
                     <input type="text" id="customerName" placeholder="Enter customer name">
                 </div>
-
                 <div class="input-group">
                     <label>Mobile Number</label>
                     <input type="tel" id="customerPhone" placeholder="Enter mobile number">
                 </div>
-
                 <div class="input-group full-width">
                     <label>Address</label>
                     <textarea id="customerAddress" rows="3" placeholder="Enter complete address"></textarea>
                 </div>
-
             </div>
-
         </div>
 
         <!-- Order Details -->
@@ -88,7 +95,7 @@
 
                 <div class="input-group">
                     <label>Product Name</label>
-                    <input type="text" id="productName" placeholder="Crochet Baby Dress">
+                    <input type="text" id="productName" placeholder="Enter Product Name">
                 </div>
 
                 <div class="input-group">
@@ -156,26 +163,29 @@
             <h3>💰 Payment Details</h3>
             <div class="form-grid">
                 <div class="input-group">
-                    <label>Total Selling Price (₹)</label>
-                    <input type="number" id="sellingPrice" placeholder="1500" oninput="calculateProfit()">
-                </div>
+                <label>Total Selling Price (₹)</label>
+                    <input type="number"
+                           id="sellingPrice"
+                           placeholder="Enter Selling Price"
+                           oninput="calculateBalance(); calculateProfit();">
+            </div>
 
                 <div class="input-group">
                     <label>Advance Received (₹)</label>
-                    <input type="number" id="advanceReceived" placeholder="500" oninput="calculateBalance()">
+                    <input type="number" id="advanceReceived" placeholder="Enter Advance Received Amount" oninput="calculateBalance()">
                 </div>
 
                 <div class="input-group">
                     <label>Balance Amount (₹)</label>
-                    <input type="number" id="balanceAmount" placeholder="1000" readonly>
+                    <input type="number" id="balanceAmount" placeholder="Enter Balance Amount" readonly>
                 </div>
 
                 <div class="input-group">
                     <label>Payment Status</label>
-                    <select id="paymentStatus">
+                    <select id="paymentStatus" onchange="calculateBalance()">
+                        <option>Pending</option>
                         <option>Advance Paid</option>
                         <option>Fully Paid</option>
-                        <option>Pending</option>
                     </select>
                 </div>
             </div>
@@ -187,37 +197,37 @@
             <div class="form-grid">
                 <div class="input-group">
                     <label>Yarn Cost (₹)</label>
-                    <input type="number" id="yarnCost" placeholder="300" oninput="calculateProfit()">
+                    <input type="number" id="yarnCost" placeholder="Yarn Cost" oninput="calculateProfit()">
                 </div>
 
                 <div class="input-group">
                     <label>Buttons Cost (₹)</label>
-                    <input type="number" id="buttonCost" placeholder="40" oninput="calculateProfit()">
+                    <input type="number" id="buttonCost" placeholder="Button Cost" oninput="calculateProfit()">
                 </div>
 
                 <div class="input-group">
                     <label>Ribbon Cost (₹)</label>
-                    <input type="number" id="ribbonCost" placeholder="30" oninput="calculateProfit()">
+                    <input type="number" id="ribbonCost" placeholder="Ribbon Cost" oninput="calculateProfit()">
                 </div>
 
                 <div class="input-group">
                     <label>Accessories Cost (₹)</label>
-                    <input type="number" id="accessoriesCost" placeholder="50" oninput="calculateProfit()">
+                    <input type="number" id="accessoriesCost" placeholder="Accessories Cost" oninput="calculateProfit()">
                 </div>
 
                 <div class="input-group">
                     <label>Packing Cost (₹)</label>
-                    <input type="number" id="packingCost" placeholder="35" oninput="calculateProfit()">
+                    <input type="number" id="packingCost" placeholder="Packing Cost" oninput="calculateProfit()">
                 </div>
 
                 <div class="input-group">
                     <label>Courier Cost (₹)</label>
-                    <input type="number" id="courierCost" placeholder="80" oninput="calculateProfit()">
+                    <input type="number" id="courierCost" placeholder="Courier Cost" oninput="calculateProfit()">
                 </div>
 
                 <div class="input-group">
                     <label>Other Cost (₹)</label>
-                    <input type="number" id="otherCost" placeholder="20" oninput="calculateProfit()">
+                    <input type="number" id="otherCost" placeholder="Other Cost" oninput="calculateProfit()">
                 </div>
 
                 <div class="input-group">
@@ -264,32 +274,15 @@
         </div>
 
     </section>
-    <!-- Search Orders -->
-    <section class="search-section">
-
-        <h2>🔍 Search Orders</h2>
-
-        <div class="search-box">
-            <input
-                    type="text"
-                    id="searchOrder"
-                    placeholder="Search by customer name, product or mobile number..."
-                    onkeyup="searchOrders()">
-        </div>
-
-    </section>
 
     <!-- Orders Table -->
-    <section class="orders-section">
+    <section class="orders-section" id="ordersSection">
 
         <h2>📋 Orders Table</h2>
 
         <div class="table-container">
-
             <table id="ordersTable">
-
                 <thead>
-
                 <tr>
                     <th>Customer</th>
                     <th>Mobile</th>
@@ -301,15 +294,12 @@
                     <th>Profit</th>
                     <th>Actions</th>
                 </tr>
-
                 </thead>
 
                 <tbody id="ordersBody">
 
                 </tbody>
-
             </table>
-
         </div>
 
     </section>
@@ -341,7 +331,19 @@
     </section>
 
 </div>
+<!-- Success Popup -->
+<div id="successPopup" class="popup">
+    <div class="popup-content">
+        <div class="checkmark">✓</div>
+        <h2>Order Saved!</h2>
+        <p>The order has been successfully added.</p>
 
+        <div class="popup-buttons">
+            <button id="newOrderBtn">Add Another Order</button>
+            <button id="viewOrdersBtn">View Orders</button>
+        </div>
+    </div>
+</div>
 <script src="script.js"></script>
 
 </body>

@@ -21,7 +21,7 @@ function calculateMaterialCost() {
     const courier = Number(document.getElementById("courierCost").value) || 0;
     const other = Number(document.getElementById("otherCost").value) || 0;
     const total = yarn + buttons + ribbon + packing + courier + other;
-    document.getElementById("materialCost").value = total;
+    document.getElementById("totalMaterialCost").value = total;
     calculateProfit();
 }
 
@@ -29,13 +29,32 @@ function calculateMaterialCost() {
 // Calculate Profit
 // ==========================
 function calculateProfit() {
-    const sellingPrice =
-        Number(document.getElementById("sellingPrice").value) || 0;
-    const materialCost =
-        Number(document.getElementById("materialCost").value) || 0;
-    const profit = sellingPrice - materialCost;
-    document.getElementById("profit").value = profit;
+
+    const sellingPrice = Number(document.getElementById("sellingPrice").value) || 0;
+
+    const yarn = Number(document.getElementById("yarnCost").value) || 0;
+    const button = Number(document.getElementById("buttonCost").value) || 0;
+    const ribbon = Number(document.getElementById("ribbonCost").value) || 0;
+    const accessories = Number(document.getElementById("accessoriesCost").value) || 0;
+    const packing = Number(document.getElementById("packingCost").value) || 0;
+    const courier = Number(document.getElementById("courierCost").value) || 0;
+    const other = Number(document.getElementById("otherCost").value) || 0;
+
+    // Calculate total material cost
+    const totalMaterialCost = yarn + button + ribbon + accessories + packing + courier + other;
+
+    // Display total material cost in the readonly field
+    document.getElementById("totalMaterialCost").value = totalMaterialCost;
+
+    // Calculate profit
+    const profit = sellingPrice - totalMaterialCost;
+
+    // Update profit section
+    document.getElementById("displaySellingPrice").innerText = "₹" + sellingPrice;
+    document.getElementById("displayMaterialCost").innerText = "₹" + totalMaterialCost;
+    document.getElementById("displayProfit").innerText = "₹" + profit;
 }
+
 function generateOrderId(){
     return "HS-"+String(orders.length+1).padStart(4,"0");
 }
@@ -67,9 +86,9 @@ const orderId=document.getElementById("orderId").value||generateOrderId();
         packingCost: Number(document.getElementById("packingCost").value),
         courierCost: Number(document.getElementById("courierCost").value),
         otherCost: Number(document.getElementById("otherCost").value),
-        materialCost: Number(document.getElementById("materialCost").value),
-        profit: Number(document.getElementById("profit").value),
-        notes: document.getElementById("notes").value
+        materialCost: Number(document.getElementById("totalMaterialCost").value),
+        profit: Number(document.getElementById("displayProfit").innerText.replace("₹", "")),
+        notes: document.getElementById("orderNotes").value
     };
     if(editIndex==-1){
         orders.push(order);
@@ -104,8 +123,16 @@ function clearForm() {
         select.selectedIndex = 0;
     });
     document.getElementById("quantity").value = 1;
-    document.getElementById("materialCost").value = "";
-    document.getElementById("profit").value = "";
+    document.getElementById("totalMaterialCost").value = "";
+    document.getElementById("displayProfit").value = "";
+    // Reset calculated fields
+    document.getElementById("balanceAmount").value = 0;
+    document.getElementById("totalMaterialCost").value = 0;
+
+    // Reset profit display
+    document.getElementById("displaySellingPrice").innerText = "₹0";
+    document.getElementById("displayMaterialCost").innerText = "₹0";
+    document.getElementById("displayProfit").innerText = "₹0";
 }
 function displayOrders(){
     const tbody=document.getElementById("ordersBody");
@@ -178,9 +205,16 @@ function editOrder(index){
     document.getElementById("packingCost").value=order.packingCost;
     document.getElementById("courierCost").value=order.courierCost;
     document.getElementById("otherCost").value=order.otherCost;
-    document.getElementById("materialCost").value=order.materialCost;
-    document.getElementById("profit").value=order.profit;
-    document.getElementById("notes").value=order.notes;
+    document.getElementById("totalMaterialCost").value = order.materialCost;
+    document.getElementById("displayProfit").innerText = "₹" + order.profit;
+    document.getElementById("orderNotes").value = order.notes;
+    // Update the profit display
+    calculateProfit();
+    // Scroll to the Add New Order form
+    document.getElementById("addOrderSection").scrollIntoView({
+        behavior: "smooth",
+        block: "start"});
+    document.getElementById("customerName").focus();
 }
 
 function updateOrder(){
@@ -210,8 +244,8 @@ function updateOrder(){
         packingCost:Number(document.getElementById("packingCost").value),
         courierCost:Number(document.getElementById("courierCost").value),
         otherCost:Number(document.getElementById("otherCost").value),
-        materialCost:Number(document.getElementById("materialCost").value),
-        profit:Number(document.getElementById("profit").value),
+        materialCost:Number(document.getElementById("totalMaterialCost").value),
+        profit:Number(document.getElementById("displayProfit").value),
         notes:document.getElementById("notes").value
     };
     localStorage.setItem("orders",JSON.stringify(orders));
@@ -230,10 +264,16 @@ function searchOrders(){
     });
 }
 
-function calculateBalance(){
-    const selling=Number(document.getElementById("sellingPrice").value)||0;
-    const advance=Number(document.getElementById("advanceReceived").value)||0;
-    document.getElementById("balanceAmount").value=selling-advance;
+function calculateBalance() {
+    const selling = Number(document.getElementById("sellingPrice").value) || 0;
+    const advance = Number(document.getElementById("advanceReceived").value) || 0;
+    const paymentStatus = document.getElementById("paymentStatus").value;
+
+    if (paymentStatus === "Fully Paid") {
+        document.getElementById("balanceAmount").value = 0;
+    } else {
+        document.getElementById("balanceAmount").value = selling - advance;
+    }
     calculateProfit();
 }
 
@@ -280,4 +320,43 @@ if(imageInput){
         };
         reader.readAsDataURL(file);
     });
+}
+const saveBtn = document.getElementById("saveOrderBtn");
+const popup = document.getElementById("successPopup");
+
+saveBtn.addEventListener("click", function(e){
+
+    e.preventDefault();
+
+    // Save your order here
+    // saveOrder();
+
+    popup.style.display = "flex";
+});
+
+document.getElementById("newOrderBtn").addEventListener("click", function(){
+
+    popup.style.display = "none";
+
+    // Reset form
+    document.querySelector(".order-form").reset();
+
+});
+
+document.getElementById("viewOrdersBtn").addEventListener("click", function(){
+
+    window.location.href = "orders.html";
+
+});
+function handleSearch(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+
+        searchOrders();
+
+        document.getElementById("ordersSection").scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
 }

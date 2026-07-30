@@ -675,3 +675,90 @@ tbody button:last-child:hover{
         border:1px solid #ccc;
     }
 }
+/* Popup Background */
+.popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Popup Box */
+.popup-content {
+    background: #fff;
+    width: 400px;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    animation: popupAnimation .3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,.3);
+}
+
+.checkmark{
+    width:70px;
+    height:70px;
+    background:#2ecc71;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:35px;
+    margin:0 auto 20px;
+}
+
+.popup-content h2{
+    color:#13294B;
+    margin-bottom:10px;
+}
+
+.popup-content p{
+    color:#666;
+    margin-bottom:25px;
+}
+
+.popup-buttons{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+}
+
+.popup-buttons button{
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    transition:.3s;
+}
+
+#newOrderBtn{
+    background:#13294B;
+    color:white;
+}
+
+#newOrderBtn:hover{
+    background:#0d1c36;
+}
+
+#viewOrdersBtn{
+    background:#f4f4f4;
+}
+
+#viewOrdersBtn:hover{
+    background:#ddd;
+}
+
+@keyframes popupAnimation{
+    from{
+        transform:scale(.7);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
