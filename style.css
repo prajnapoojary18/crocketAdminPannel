@@ -787,3 +787,28 @@ tbody button:last-child:hover{
 .search-box button:hover {
     background-color: #0f203b;
 }
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.table-header h2 {
+    margin: 0;
+}
+
+.export-btn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.export-btn:hover {
+    background-color: #218838;
+}

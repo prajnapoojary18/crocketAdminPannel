@@ -401,4 +401,27 @@ function handleSearch(event) {
             block: "start"
         });
     }
+
+}
+function exportToExcel() {
+    const table = document.getElementById("ordersTable");
+
+    // Clone the table so we don't modify the original
+    const clonedTable = table.cloneNode(true);
+
+    // Remove the "Actions" column
+    const rows = clonedTable.querySelectorAll("tr");
+    rows.forEach(row => {
+        if (row.cells.length > 0) {
+            row.deleteCell(row.cells.length - 1);
+        }
+    });
+
+    // Convert table to workbook
+    const workbook = XLSX.utils.table_to_book(clonedTable, {
+        sheet: "Orders"
+    });
+
+    // Download the Excel file
+    XLSX.writeFile(workbook, "Orders.xlsx");
 }

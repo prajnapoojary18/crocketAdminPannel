@@ -279,7 +279,9 @@
     <section class="orders-section" id="ordersSection">
 
         <h2>📋 Orders Table</h2>
-
+        <button type="button" class="export-btn" onclick="exportToExcel()">
+            📥 Export
+        </button>
         <div class="table-container">
             <table id="ordersTable">
                 <thead>
@@ -349,6 +351,9 @@
         </div>
     </div>
 </div>
+<!-- SheetJS Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 <script src="script.js"></script>
 
 </body>
