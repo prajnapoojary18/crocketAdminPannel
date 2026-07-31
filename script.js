@@ -92,6 +92,7 @@ const orderId=document.getElementById("orderId").value||generateOrderId();
         sellingPrice: Number(document.getElementById("sellingPrice").value),
         advanceReceived: Number(document.getElementById("advanceReceived").value),
         balanceAmount: Number(document.getElementById("balanceAmount").value),
+        paymentStatus: document.getElementById("paymentStatus").value,
         yarnCost: Number(document.getElementById("yarnCost").value),
         buttonCost: Number(document.getElementById("buttonCost").value),
         ribbonCost: Number(document.getElementById("ribbonCost").value),
@@ -167,7 +168,7 @@ function displayOrders(){
             <td>${order.status}</td>
             <td>₹${order.sellingPrice}</td>
             <td>₹${order.materialCost}</td>
-            <td>₹${order.profit}</td>
+            <td>${order.paymentStatus}</td>
             <td>
                 <button onclick="editOrder(${index})">✏️</button>
                 <button onclick="deleteOrder(${index})">🗑️</button>
@@ -219,6 +220,7 @@ function editOrder(index){
     document.getElementById("sellingPrice").value=order.sellingPrice;
     document.getElementById("advanceReceived").value=order.advanceReceived;
     document.getElementById("balanceAmount").value=order.balanceAmount;
+    document.getElementById("paymentStatus").value=order.paymentStatus;
     document.getElementById("yarnCost").value=order.yarnCost;
     document.getElementById("buttonCost").value=order.buttonCost;
     document.getElementById("ribbonCost").value=order.ribbonCost;
@@ -258,6 +260,7 @@ function updateOrder(){
         sellingPrice:Number(document.getElementById("sellingPrice").value),
         advanceReceived:Number(document.getElementById("advanceReceived").value),
         balanceAmount:Number(document.getElementById("balanceAmount").value),
+        paymentStatus: document.getElementById("paymentStatus").value,
         yarnCost:Number(document.getElementById("yarnCost").value),
         buttonCost:Number(document.getElementById("buttonCost").value),
         ribbonCost:Number(document.getElementById("ribbonCost").value),
@@ -299,7 +302,6 @@ function searchOrders() {
              noDataRow.style.display = "none";
          }
      }
-     // Scroll to the orders table if a match is found
      if (found) {
          document.getElementById("ordersSection").scrollIntoView({
              behavior: "smooth",
@@ -307,6 +309,7 @@ function searchOrders() {
          });
      }
  }
+
 function calculateBalance() {
     const selling = Number(document.getElementById("sellingPrice").value) || 0;
     const advance = Number(document.getElementById("advanceReceived").value) || 0;
@@ -366,66 +369,45 @@ if(imageInput){
 }
 const saveBtn = document.getElementById("saveOrderBtn");
 const popup = document.getElementById("successPopup");
-
 saveBtn.addEventListener("click", function(e){
-
     e.preventDefault();
-
-    // Save your order here
-    // saveOrder();
-
     popup.style.display = "flex";
 });
 
 document.getElementById("newOrderBtn").addEventListener("click", function(){
-
     popup.style.display = "none";
-
-    // Reset form
     document.querySelector(".order-form").reset();
-
 });
 
 document.getElementById("viewOrdersBtn").addEventListener("click", function(){
-
     window.location.href = "orders.html";
-
 });
 function handleSearch(event) {
     if (event.key === "Enter") {
         event.preventDefault();
-
         searchOrders();
-
         document.getElementById("ordersSection").scrollIntoView({
             behavior: "smooth",
             block: "start"
         });
     }
-
 }
+
 function exportToExcel() {
     const table = document.getElementById("ordersTable");
-
-    // Clone the table so we don't modify the original
     const clonedTable = table.cloneNode(true);
-
-    // Remove the "Actions" column
     const rows = clonedTable.querySelectorAll("tr");
     rows.forEach(row => {
         if (row.cells.length > 0) {
             row.deleteCell(row.cells.length - 1);
         }
     });
-
-    // Convert table to workbook
     const workbook = XLSX.utils.table_to_book(clonedTable, {
         sheet: "Orders"
     });
-
-    // Download the Excel file
     XLSX.writeFile(workbook, "Orders.xlsx");
 }
+
 function setNextOrderId() {
     const nextId = generateOrderId();
     document.getElementById("orderId").value = nextId;
