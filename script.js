@@ -158,6 +158,7 @@ function displayOrders(){
     orders.forEach((order,index)=>{
         tbody.innerHTML+=`
         <tr>
+            <td>${order.orderId}</td>
             <td>${order.customerName}</td>
             <td>${order.customerPhone}</td>
             <td>${order.productName}</td>
