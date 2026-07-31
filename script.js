@@ -118,6 +118,7 @@ const orderId=document.getElementById("orderId").value||generateOrderId();
     displayOrders();
     updateDashboard();
     clearForm();
+    setNextOrderId();
 
     alert(message);
 }
@@ -424,4 +425,8 @@ function exportToExcel() {
 
     // Download the Excel file
     XLSX.writeFile(workbook, "Orders.xlsx");
+}
+function setNextOrderId() {
+    const nextId = generateOrderId();
+    document.getElementById("orderId").value = nextId;
 }
