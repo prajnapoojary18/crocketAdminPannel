@@ -66,10 +66,6 @@ function calculateProfit() {
         profit: profit
     };
 }
-
-function generateOrderId(){
-    return "HS-"+String(orders.length+1).padStart(4,"0");
-}
 // ==========================
 // Save Order
 // ==========================
@@ -459,9 +455,22 @@ function exportToExcel() {
     XLSX.writeFile(workbook, "Orders.xlsx");
 }
 
-function setNextOrderId() {
-    const nextId = generateOrderId();
-    document.getElementById("orderId").value = nextId;
+function generateOrderId() {
+    let maxNumber = 0;
+    orders.forEach(order => {
+        if (!order.orderID) {
+            return;
+        }
+        const match = String(order.orderID).match(/^HS-(\d+)$/);
+        if (match) {
+            const number = Number(match[1]);
+            if (number > maxNumber) {
+                maxNumber = number;
+            }
+        }
+    });
+    const nextNumber = maxNumber + 1;
+    return "HS-" + String(nextNumber).padStart(4, "0");
 }
 
 function calculateTotalSellingPrice() {
