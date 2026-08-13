@@ -412,8 +412,9 @@ function setNextOrderId() {
 function calculateTotalSellingPrice() {
     const sellingPrice = parseFloat(document.getElementById('sellingPrice').value) || 0;
     const shippingCharge = parseFloat(document.getElementById('shippingCharge').value) || 0;
+    const discountApplied = parseFloat(document.getElementById('discountApplied').value) || 0;
 
-    const TotalSellingPrice = sellingPrice + shippingCharge;
+    const TotalSellingPrice = sellingPrice + shippingCharge + discountApplied;
 
     document.getElementById('TotalSellingPrice').value = TotalSellingPrice;
 
