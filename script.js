@@ -29,26 +29,42 @@ function calculateMaterialCost() {
 // Calculate Profit
 // ==========================
 function calculateProfit() {
-    const TotalSellingPrice =
-        Number(document.getElementById("TotalSellingPrice").value) || 0;
+    const sellingPrice =Number(document.getElementById("TotalSellingPrice").value) || 0;
+    const discountApplied =Number(document.getElementById("discountApplied").value) || 0;
+    const shippingCharge =Number(document.getElementById("shippingCharge").value) || 0;
     const yarn =Number(document.getElementById("yarnCost").value) || 0;
     const button =Number(document.getElementById("buttonCost").value) || 0;
     const ribbon =Number(document.getElementById("ribbonCost").value) || 0;
     const accessories =Number(document.getElementById("accessoriesCost").value) || 0;
     const packing =Number(document.getElementById("packingCost").value) || 0;
-    // const courier =
-    //     Number(document.getElementById("courierCost").value) || 0;
     const other =Number(document.getElementById("otherCost").value) || 0;
-    // Calculate total material cost
+    // ==============================
+    // TOTAL MATERIAL COST
+    // ==============================
     const totalMaterialCost =yarn + button + ribbon + accessories + packing + other;
-    // Display total material cost
-    document.getElementById("totalMaterialCost").value = totalMaterialCost;
-    // Calculate profit
-    const profit = TotalSellingPrice - totalMaterialCost;
-    // Update profit section
-    document.getElementById("displayTotalSellingPrice").innerText ="₹" + TotalSellingPrice;
+    document.getElementById("totalMaterialCost").value =totalMaterialCost;
+    // ==============================
+    // TOTAL SELLING PRICE
+    // Selling Price + Shipping - Discount
+    // ==============================
+    const totalSellingPrice =sellingPrice +shippingCharge -discountApplied;
+    // ==============================
+    // PROFIT
+    // Total Selling Price - Material Cost
+    // ==============================
+    const profit =totalSellingPrice -totalMaterialCost;
+    // ==============================
+    // DISPLAY
+    // ==============================
+    document.getElementById("displayTotalSellingPrice").innerText ="₹" + totalSellingPrice;
     document.getElementById("displayMaterialCost").innerText ="₹" + totalMaterialCost;
     document.getElementById("displayProfit").innerText ="₹" + profit;
+    // Return calculated values
+    return {
+        totalSellingPrice: totalSellingPrice,
+        totalMaterialCost: totalMaterialCost,
+        profit: profit
+    };
 }
 
 function generateOrderId(){
@@ -57,6 +73,7 @@ function generateOrderId(){
 // ==========================
 // Save Order
 // ==========================
+
 function saveOrder() {
 const requiredFields = [
         "customerName",
@@ -86,6 +103,10 @@ const orderId=document.getElementById("orderId").value||generateOrderId();
         orderDate: document.getElementById("orderDate").value,
         deliveryDate: document.getElementById("deliveryDate").value,
         TotalSellingPrice: Number(document.getElementById("TotalSellingPrice").value),
+        sellingPrice: Number(document.getElementById("sellingPrice").value),
+        discountApplied:Number(document.getElementById("discountApplied").value),
+        shippingCharge:Number(document.getElementById("shippingCharge").value),
+        accessoriesCost:Number(document.getElementById("accessoriesCost").value),
         advanceReceived: Number(document.getElementById("advanceReceived").value),
         balanceAmount: Number(document.getElementById("balanceAmount").value),
         paymentStatus: document.getElementById("paymentStatus").value,
@@ -93,7 +114,6 @@ const orderId=document.getElementById("orderId").value||generateOrderId();
         buttonCost: Number(document.getElementById("buttonCost").value),
         ribbonCost: Number(document.getElementById("ribbonCost").value),
         packingCost: Number(document.getElementById("packingCost").value),
-//        courierCost: Number(document.getElementById("courierCost").value),
         otherCost: Number(document.getElementById("otherCost").value),
         materialCost: Number(document.getElementById("totalMaterialCost").value),
         profit: Number(document.getElementById("displayProfit").innerText.replace("₹", "")),
@@ -199,78 +219,114 @@ function deleteOrder(index){
     updateDashboard();
 }
 
-function editOrder(index){
-    const order=orders[index];
-    editIndex=index;
-    document.getElementById("customerName").value=order.customerName;
-    document.getElementById("customerPhone").value=order.customerPhone;
-    document.getElementById("customerAddress").value=order.customerAddress;
-    document.getElementById("productName").value=order.productName;
-    document.getElementById("category").value=order.category;
-    document.getElementById("colour").value=order.colour;
-    document.getElementById("size").value=order.size;
-    document.getElementById("quantity").value=order.quantity;
-    document.getElementById("status").value=order.status;
-    document.getElementById("orderDate").value=order.orderDate;
-    document.getElementById("deliveryDate").value=order.deliveryDate;
-    document.getElementById("TotalSellingPrice").value=order.TotalSellingPrice;
-    document.getElementById("advanceReceived").value=order.advanceReceived;
-    document.getElementById("balanceAmount").value=order.balanceAmount;
-    document.getElementById("paymentStatus").value=order.paymentStatus;
-    document.getElementById("yarnCost").value=order.yarnCost;
-    document.getElementById("buttonCost").value=order.buttonCost;
-    document.getElementById("ribbonCost").value=order.ribbonCost;
-    document.getElementById("packingCost").value=order.packingCost;
-//    document.getElementById("courierCost").value=order.courierCost;
-    document.getElementById("otherCost").value=order.otherCost;
-    document.getElementById("totalMaterialCost").value = order.materialCost;
-    document.getElementById("displayProfit").innerText = "₹" + order.profit;
-    document.getElementById("orderNotes").value = order.notes;
-    // Update the profit display
+function editOrder(index) {
+    const order = orders[index];
+    editIndex = index;
+    document.getElementById("customerName").value =order.customerName || "";
+    document.getElementById("customerPhone").value =order.customerPhone || "";
+    document.getElementById("customerAddress").value =order.customerAddress || "";
+    document.getElementById("productName").value =order.productName || "";
+    document.getElementById("category").value =order.category || "";
+    document.getElementById("colour").value =order.colour || "";
+    document.getElementById("size").value =order.size || "";
+    document.getElementById("quantity").value =order.quantity || "";
+    document.getElementById("status").value =order.status || "";
+    document.getElementById("orderDate").value =order.orderDate || "";
+    document.getElementById("deliveryDate").value =order.deliveryDate || "";
+    // Selling price
+    document.getElementById("TotalSellingPrice").value =order.TotalSellingPrice || 0;
+    document.getElementById("sellingPrice").value =order.TotalSellingPrice || 0;
+    // Discount
+    document.getElementById("discountApplied").value =order.discountApplied || 0;
+    // Shipping
+    document.getElementById("shippingCharge").value =order.shippingCharge || 0;
+    // Accessories
+    document.getElementById("accessoriesCost").value =order.accessoriesCost || 0;
+    document.getElementById("advanceReceived").value =order.advanceReceived || 0;
+    document.getElementById("balanceAmount").value =order.balanceAmount || 0;
+    document.getElementById("paymentStatus").value =order.paymentStatus || "";
+    // Material costs
+    document.getElementById("yarnCost").value =order.yarnCost || 0;
+    document.getElementById("buttonCost").value =order.buttonCost || 0;
+    document.getElementById("ribbonCost").value =order.ribbonCost || 0;
+    document.getElementById("packingCost").value =order.packingCost || 0;
+    document.getElementById("otherCost").value =order.otherCost || 0;
+    document.getElementById("totalMaterialCost").value =order.materialCost || 0;
+    // Notes
+    document.getElementById("orderNotes").value =order.notes || "";
+    // Recalculate everything after loading the values
     calculateProfit();
-    // Scroll to the Add New Order form
+        // Change Save button to Update
+     const saveButton =document.getElementById("saveOrderButton");
+        saveButton.innerText = "Update";
+        saveButton.onclick = updateOrder;
+    // Scroll to form
     document.getElementById("addOrderSection").scrollIntoView({
         behavior: "smooth",
         block: "start"});
     document.getElementById("customerName").focus();
 }
 
-function updateOrder(){
-    if(editIndex===-1){
+function updateOrder() {
+    // If no order is being edited, save as a new order
+    if (editIndex === -1) {
         saveOrder();
         return;
     }
-    orders[editIndex]={
+    // Recalculate material cost and profit using the current form values
+    const calculation = calculateProfit();
+    // Update the existing order
+    orders[editIndex] = {
         ...orders[editIndex],
+        // Customer details
         customerName:document.getElementById("customerName").value,
         customerPhone:document.getElementById("customerPhone").value,
         customerAddress:document.getElementById("customerAddress").value,
+        // Product details
         productName:document.getElementById("productName").value,
         category:document.getElementById("category").value,
         colour:document.getElementById("colour").value,
         size:document.getElementById("size").value,
         quantity:document.getElementById("quantity").value,
+        // Order details
         status:document.getElementById("status").value,
         orderDate:document.getElementById("orderDate").value,
         deliveryDate:document.getElementById("deliveryDate").value,
-        TotalSellingPrice:Number(document.getElementById("TotalSellingPrice").value),
-        advanceReceived:Number(document.getElementById("advanceReceived").value),
-        balanceAmount:Number(document.getElementById("balanceAmount").value),
-        paymentStatus: document.getElementById("paymentStatus").value,
-        yarnCost:Number(document.getElementById("yarnCost").value),
-        buttonCost:Number(document.getElementById("buttonCost").value),
-        ribbonCost:Number(document.getElementById("ribbonCost").value),
-        packingCost:Number(document.getElementById("packingCost").value),
-//        courierCost:Number(document.getElementById("courierCost").value),
-        otherCost:Number(document.getElementById("otherCost").value),
-        materialCost:Number(document.getElementById("totalMaterialCost").value),
-        profit:Number(document.getElementById("displayProfit").value),
-        notes:document.getElementById("notes").value
+        // Selling price
+        TotalSellingPrice:Number(document.getElementById("TotalSellingPrice").value) || 0,
+        TotalSellingPrice:Number(document.getElementById("sellingPrice").value) || 0,
+        // Discount
+        discountApplied:Number(document.getElementById("discountApplied").value) || 0,
+        // Shipping is paid by customer.
+        // Save it, but DO NOT subtract it from profit.
+        shippingCharge:Number(document.getElementById("shippingCharge").value) || 0,
+        // Material/accessories costs
+        accessoriesCost:Number(document.getElementById("accessoriesCost").value) || 0,
+        yarnCost:Number(document.getElementById("yarnCost").value) || 0,
+        buttonCost:Number(document.getElementById("buttonCost").value) || 0,
+        ribbonCost:Number(document.getElementById("ribbonCost").value) || 0,
+        packingCost:Number(document.getElementById("packingCost").value) || 0,
+        otherCost:Number(document.getElementById("otherCost").value) || 0,
+        // Payment details
+        advanceReceived:Number(document.getElementById("advanceReceived").value) || 0,
+        balanceAmount:Number(document.getElementById("balanceAmount").value) || 0,
+        paymentStatus:document.getElementById("paymentStatus").value,
+        // Calculated values
+        materialCost:calculation.totalMaterialCost,
+        profit:calculation.profit,
+        // Notes
+        notes:document.getElementById("orderNotes").value
     };
-    localStorage.setItem("orders",JSON.stringify(orders));
-    editIndex=-1;
+    // Save updated orders to localStorage
+    localStorage.setItem("orders", JSON.stringify(orders));
+    // Reset edit mode and change Update button back to Save
+    editIndex = -1;
+    const saveButton = document.getElementById("saveOrderButton");
+    saveButton.innerText = "💾 Save Order";
+     saveButton.onclick = saveOrder;
+     // Clear form
     clearForm();
-    displayOrders();
+    // Refresh order list and dashboard displayOrders();
     updateDashboard();
     alert("Order updated successfully ❤️");
 }
@@ -340,7 +396,6 @@ document.getElementById("yarnCost").addEventListener("input",calculateMaterialCo
 document.getElementById("buttonCost").addEventListener("input",calculateMaterialCost);
 document.getElementById("ribbonCost").addEventListener("input",calculateMaterialCost);
 document.getElementById("packingCost").addEventListener("input",calculateMaterialCost);
-//document.getElementById("courierCost").addEventListener("input",calculateMaterialCost);
 document.getElementById("otherCost").addEventListener("input",calculateMaterialCost);
 
 window.onload=function(){
@@ -414,7 +469,7 @@ function calculateTotalSellingPrice() {
     const shippingCharge = parseFloat(document.getElementById('shippingCharge').value) || 0;
     const discountApplied = parseFloat(document.getElementById('discountApplied').value) || 0;
 
-    const TotalSellingPrice = sellingPrice + shippingCharge + discountApplied;
+    const TotalSellingPrice = (sellingPrice + shippingCharge )- discountApplied;
 
     document.getElementById('TotalSellingPrice').value = TotalSellingPrice;
 
