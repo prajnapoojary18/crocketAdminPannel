@@ -473,6 +473,25 @@ function generateOrderId() {
     return "HS-" + String(nextNumber).padStart(4, "0");
 }
 
+function fixExistingOrderIds() {
+
+    orders.forEach((order, index) => {
+        order.orderID = "HS-" + String(index + 1).padStart(4, "0");
+    });
+
+    // Save corrected orders
+    localStorage.setItem("orders", JSON.stringify(orders));
+
+    // Refresh the table
+    displayOrders();
+
+    // Refresh dashboard if required
+    updateDashboard();
+
+    alert("All existing Order IDs have been corrected.");
+}
+
+
 function calculateTotalSellingPrice() {
     const sellingPrice = parseFloat(document.getElementById('sellingPrice').value) || 0;
     const shippingCharge = parseFloat(document.getElementById('shippingCharge').value) || 0;
