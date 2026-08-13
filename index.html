@@ -162,13 +162,25 @@
         <div class="form-section">
             <h3>💰 Payment Details</h3>
             <div class="form-grid">
+
                 <div class="input-group">
-                <label>Total Selling Price (₹)</label>
-                    <input type="number"
-                           id="sellingPrice"
-                           placeholder="Enter Selling Price"
-                           oninput="calculateBalance(); calculateProfit();">
-            </div>
+                    <label>Selling Price (₹)</label>
+                    <input type="number" id="sellingPrice" placeholder="Enter Selling Price"
+                           oninput="calculateTotalSellingPrice()">
+                </div>
+
+                <div class="input-group">
+                    <label>Shipping Charge (₹)</label>
+                    <input type="number" id="shippingCharge" placeholder="Enter Shipping Charge"
+                           oninput="calculateTotalSellingPrice()">
+                </div>
+
+                <div class="input-group">
+                    <label>Total Selling Price (₹)</label>
+                    <input type="number" id="TotalSellingPrice"
+                           placeholder="Total Selling Price"
+                           oninput="calculateBalance(); calculateProfit();" readonly>
+                </div>
 
                 <div class="input-group">
                     <label>Advance Received (₹)</label>
@@ -194,46 +206,56 @@
         <!-- Material Cost -->
         <div class="form-section">
             <h3>🧵 Material Cost</h3>
+
             <div class="form-grid">
+
                 <div class="input-group">
                     <label>Yarn Cost (₹)</label>
-                    <input type="number" id="yarnCost" placeholder="Yarn Cost" oninput="calculateProfit()">
+                    <input type="number" id="yarnCost"
+                           placeholder="Yarn Cost"
+                           oninput="calculateMaterialCost()">
                 </div>
 
                 <div class="input-group">
                     <label>Buttons Cost (₹)</label>
-                    <input type="number" id="buttonCost" placeholder="Button Cost" oninput="calculateProfit()">
+                    <input type="number" id="buttonCost"
+                           placeholder="Button Cost"
+                           oninput="calculateMaterialCost()">
                 </div>
 
                 <div class="input-group">
                     <label>Ribbon Cost (₹)</label>
-                    <input type="number" id="ribbonCost" placeholder="Ribbon Cost" oninput="calculateProfit()">
+                    <input type="number" id="ribbonCost"
+                           placeholder="Ribbon Cost"
+                           oninput="calculateMaterialCost()">
                 </div>
 
                 <div class="input-group">
                     <label>Accessories Cost (₹)</label>
-                    <input type="number" id="accessoriesCost" placeholder="Accessories Cost" oninput="calculateProfit()">
+                    <input type="number" id="accessoriesCost"
+                           placeholder="Accessories Cost"
+                           oninput="calculateMaterialCost()">
                 </div>
 
                 <div class="input-group">
                     <label>Packing Cost (₹)</label>
-                    <input type="number" id="packingCost" placeholder="Packing Cost" oninput="calculateProfit()">
-                </div>
-
-                <div class="input-group">
-                    <label>Courier Cost (₹)</label>
-                    <input type="number" id="courierCost" placeholder="Courier Cost" oninput="calculateProfit()">
+                    <input type="number" id="packingCost"
+                           placeholder="Packing Cost"
+                           oninput="calculateMaterialCost()">
                 </div>
 
                 <div class="input-group">
                     <label>Other Cost (₹)</label>
-                    <input type="number" id="otherCost" placeholder="Other Cost" oninput="calculateProfit()">
+                    <input type="number" id="otherCost"
+                           placeholder="Other Cost"
+                           oninput="calculateMaterialCost()">
                 </div>
 
                 <div class="input-group">
                     <label>Total Material Cost (₹)</label>
                     <input type="number" id="totalMaterialCost" readonly>
                 </div>
+
             </div>
         </div>
 
@@ -242,8 +264,8 @@
             <h3>💚 Profit (Auto Calculated)</h3>
             <div class="profit-box">
                 <div class="profit-item">
-                    <span>Selling Price</span>
-                    <strong id="displaySellingPrice">₹0</strong>
+                    <span>Total Selling Price</span>
+                    <strong id="displayTotalSellingPrice">₹0</strong>
                 </div>
 
                 <div class="profit-item">
