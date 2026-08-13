@@ -4,13 +4,6 @@
 let orders = JSON.parse(localStorage.getItem("orders")) || [];
 let editIndex = -1;
 // ==========================
-// Generate Order ID
-// ==========================
-function generateOrderId() {
-    return "HS" + Date.now();
-}
-
-// ==========================
 // Calculate Material Cost
 // ==========================
 function calculateMaterialCost() {
@@ -71,22 +64,29 @@ function calculateProfit() {
 // ==========================
 
 function saveOrder() {
-const requiredFields = [
+    const requiredFields = [
         "customerName",
         "customerPhone",
         "productName",
         "TotalSellingPrice"
     ];
     const isEmpty = requiredFields.every(id =>
-        document.getElementById(id).value.trim() === "");
+        document.getElementById(id).value.trim() === ""
+    );
     if (isEmpty) {
         alert("⚠️ No details added. Please enter the order details before saving.");
         return;
     }
-const orderId=document.getElementById("orderId").value||generateOrderId();
-    const order = {
-        orderId:orderId,
-        id: generateOrderId(),
+    // =====================================================
+    // EDIT EXISTING ORDER
+    // =====================================================
+    if (editIndex !== -1) {
+        // IMPORTANT:
+        // Keep the existing Order ID.
+        const existingOrderId = orders[editIndex].orderId;
+        const updatedOrder = {
+            ...orders[editIndex],
+            orderId: existingOrderId,
         customerName: document.getElementById("customerName").value,
         customerPhone: document.getElementById("customerPhone").value,
         customerAddress: document.getElementById("customerAddress").value,
@@ -115,26 +115,65 @@ const orderId=document.getElementById("orderId").value||generateOrderId();
         profit: Number(document.getElementById("displayProfit").innerText.replace("₹", "")),
         notes: document.getElementById("orderNotes").value
     };
-    let message = "";
+    orders[editIndex] = updatedOrder;
+            editIndex = -1;
+            saveLocalStorage();
+            displayOrders();
+            updateDashboard();
+            clearForm();
+            setNextOrderId();
+            // Change Update button back to Save
+            const saveButton =
+                document.getElementById("saveOrderButton");
+            if (saveButton) {
+                saveButton.innerText = "💾 Save Order";
+                saveButton.onclick = saveOrder;
+            }
+            alert("Order Details Updated Successfully ✨");
+            return;
+        }
+        // =====================================================
+        // CREATE NEW ORDER
+        // =====================================================
 
-    if (editIndex == -1) {
+        const orderId = generateOrderId();
+        const order = {
+            orderId: orderId,
+            customerName:document.getElementById("customerName").value,
+            customerPhone:document.getElementById("customerPhone").value,
+            customerAddress:document.getElementById("customerAddress").value,
+            productName:document.getElementById("productName").value,
+            category:document.getElementById("category").value,
+            colour:document.getElementById("colour").value,
+            size:document.getElementById("size").value,
+            quantity:document.getElementById("quantity").value,
+            status:document.getElementById("status").value,
+            orderDate:document.getElementById("orderDate").value,
+            deliveryDate:document.getElementById("deliveryDate").value,
+            TotalSellingPrice:Number(document.getElementById("TotalSellingPrice").value) || 0,
+            sellingPrice:Number(document.getElementById("sellingPrice").value) || 0,
+            discountApplied:Number(document.getElementById("discountApplied").value) || 0,
+            shippingCharge:Number(document.getElementById("shippingCharge").value) || 0,
+            accessoriesCost:Number(document.getElementById("accessoriesCost").value) || 0,
+            advanceReceived:Number(document.getElementById("advanceReceived").value) || 0,
+            balanceAmount:Number(document.getElementById("balanceAmount").value) || 0,
+            paymentStatus:document.getElementById("paymentStatus").value,
+            yarnCost:Number(document.getElementById("yarnCost").value) || 0,
+            buttonCost:Number(document.getElementById("buttonCost").value) || 0,
+            ribbonCost:Number(document.getElementById("ribbonCost").value) || 0,
+            packingCost:Number(document.getElementById("packingCost").value) || 0,
+            otherCost:Number(document.getElementById("otherCost").value) || 0,
+            materialCost:Number(document.getElementById("totalMaterialCost").value) || 0,
+            profit:Number(document.getElementById("displayProfit").innerText.replace("₹", "")) || 0,
+            notes:document.getElementById("orderNotes").value};
         orders.push(order);
-        message = "Order Saved Successfully ❤️";
-    } else {
-        order.id = orders[editIndex].id;
-        orders[editIndex] = order;
-        editIndex = -1;
-        message = "Order Details Updated Successfully ✨";
+        saveLocalStorage();
+        displayOrders();
+        updateDashboard();
+        clearForm();
+        setNextOrderId();
+        alert("Order Saved Successfully ❤️");
     }
-
-    saveLocalStorage();
-    displayOrders();
-    updateDashboard();
-    clearForm();
-    setNextOrderId();
-
-    alert(message);
-}
 
 // ==========================
 // Clear Form
@@ -385,7 +424,6 @@ function loadOrders(){
     displayOrders();
     updateDashboard();
 }
-
 document.getElementById("TotalSellingPrice").addEventListener("input",calculateBalance);
 document.getElementById("advanceReceived").addEventListener("input",calculateBalance);
 document.getElementById("yarnCost").addEventListener("input",calculateMaterialCost);
@@ -393,12 +431,10 @@ document.getElementById("buttonCost").addEventListener("input",calculateMaterial
 document.getElementById("ribbonCost").addEventListener("input",calculateMaterialCost);
 document.getElementById("packingCost").addEventListener("input",calculateMaterialCost);
 document.getElementById("otherCost").addEventListener("input",calculateMaterialCost);
-
 window.onload=function(){
     loadOrders();
     document.getElementById("orderId").value=generateOrderId();
 };
-
 const imageInput=document.getElementById("productImage");
 if(imageInput){
     imageInput.addEventListener("change",function(e){
@@ -419,12 +455,10 @@ saveBtn.addEventListener("click", function(e){
     e.preventDefault();
     popup.style.display = "flex";
 });
-
 document.getElementById("newOrderBtn").addEventListener("click", function(){
     popup.style.display = "none";
     document.querySelector(".order-form").reset();
 });
-
 document.getElementById("viewOrdersBtn").addEventListener("click", function(){
     window.location.href = "orders.html";
 });
@@ -458,10 +492,9 @@ function exportToExcel() {
 function generateOrderId() {
     let maxNumber = 0;
     orders.forEach(order => {
-        if (!order.orderID) {
-            return;
-        }
-        const match = String(order.orderID).match(/^HS-(\d+)$/);
+        const existingId = order.orderId;
+        if (!existingId) return;
+        const match = String(existingId).match(/^HS-(\d+)$/);
         if (match) {
             const number = Number(match[1]);
             if (number > maxNumber) {
@@ -469,28 +502,8 @@ function generateOrderId() {
             }
         }
     });
-    const nextNumber = maxNumber + 1;
-    return "HS-" + String(nextNumber).padStart(4, "0");
+    return "HS-" + String(maxNumber + 1).padStart(4, "0");
 }
-
-function fixExistingOrderIds() {
-
-    orders.forEach((order, index) => {
-        order.orderID = "HS-" + String(index + 1).padStart(4, "0");
-    });
-
-    // Save corrected orders
-    localStorage.setItem("orders", JSON.stringify(orders));
-
-    // Refresh the table
-    displayOrders();
-
-    // Refresh dashboard if required
-    updateDashboard();
-
-    alert("All existing Order IDs have been corrected.");
-}
-
 
 function calculateTotalSellingPrice() {
     const sellingPrice = parseFloat(document.getElementById('sellingPrice').value) || 0;
